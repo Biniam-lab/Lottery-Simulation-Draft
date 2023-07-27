@@ -3,7 +3,10 @@ package demo.project.Lottery.Controller;
 import demo.project.Lottery.Model.LotteryTicket;
 import demo.project.Lottery.Service.LotteryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class LotteryController {
@@ -19,9 +22,9 @@ public class LotteryController {
     @PostMapping("/purchase/{type}/{method}")
     public LotteryTicket saveTicketMax(@PathVariable("type") String type,
                                        @PathVariable("method") String method,
-                                       @RequestBody LotteryTicket lotteryTicket) {
+                                       LotteryTicket lotteryTicket) {
 
-        return lotteryService.saveTicketMax(type, method, lotteryTicket);
+        return lotteryService.saveTicket(type, method, lotteryTicket);
 
     }
 }

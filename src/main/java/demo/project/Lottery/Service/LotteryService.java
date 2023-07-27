@@ -16,18 +16,26 @@ public class LotteryService {
     @Autowired
     private NumbersGeneratorService numbersGeneratorService;
 
-    public LotteryTicket saveTicketMax(String type, String method, LotteryTicket lotteryTicket) {
+    private String[] pickedLine;
+
+    public LotteryTicket saveTicket(String type, String method, LotteryTicket lotteryTicket) {
 
         if (type.equalsIgnoreCase(LotteryType.LOTTOMAX.name()) &&
                 method.equalsIgnoreCase(LotteryPlayMethod.QUICK_PICK.name())) {
             lotteryTicket.setLotteryPlayMethod(LotteryPlayMethod.QUICK_PICK);
             lotteryTicket.setLotteryType(LotteryType.LOTTOMAX);
-            String[] pickedLine = numbersGeneratorService.lottoMaxNumberGenerator();
+            pickedLine = numbersGeneratorService.lottoMaxNumberGenerator();
+            lotteryTicket.setTicket(pickedLine);
+            return lotteryRepository.save(lotteryTicket);
+        } else if (type.equalsIgnoreCase(LotteryType.LOTTO649.name()) &&
+                method.equalsIgnoreCase(LotteryPlayMethod.QUICK_PICK.name())) {
+            lotteryTicket.setLotteryPlayMethod(LotteryPlayMethod.QUICK_PICK);
+            lotteryTicket.setLotteryType(LotteryType.LOTTO649);
+            pickedLine = numbersGeneratorService.lotto649NumberGenerator();
             lotteryTicket.setTicket(pickedLine);
             return lotteryRepository.save(lotteryTicket);
         }
         return null;
     }
 
-    //int randomNumber = lotteryType.getLOWER_LIMIT() + random.nextInt((lotteryType.getUPPER_LIMIT() - lotteryType.getLOWER_LIMIT()) + 1);
 }
