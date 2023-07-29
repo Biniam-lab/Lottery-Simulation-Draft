@@ -18,22 +18,22 @@ public class LotteryService {
     @Autowired
     private NumbersGeneratorService numbersGeneratorService;
 
-    public LotteryTicket saveTicketLottomaxQuickPick(LotteryTicket lotteryTicket) {
+    public LotteryTicket saveTicketLottomaxQuickPick(List<Integer> userGeneratedLine, LotteryTicket lotteryTicket) {
 
         String[] pickedLine;
         lotteryTicket.setLotteryPlayMethod(LotteryPlayMethod.QUICK_PICK);
         lotteryTicket.setLotteryType(LotteryType.LOTTOMAX);
-        pickedLine = numbersGeneratorService.lottoMaxNumberGenerator();
+        pickedLine = numbersGeneratorService.lottoMaxNumberGenerator(userGeneratedLine);
         lotteryTicket.setTicket(pickedLine);
         return lotteryRepository.save(lotteryTicket);
     }
 
-    public LotteryTicket saveTicketLotto649QuickPick(LotteryTicket lotteryTicket) {
+    public LotteryTicket saveTicketLotto649QuickPick(List<Integer> userGeneratedLine, LotteryTicket lotteryTicket) {
 
         String[] pickedLine;
         lotteryTicket.setLotteryPlayMethod(LotteryPlayMethod.QUICK_PICK);
         lotteryTicket.setLotteryType(LotteryType.LOTTO649);
-        pickedLine = numbersGeneratorService.lotto649NumberGenerator();
+        pickedLine = numbersGeneratorService.lotto649NumberGenerator(userGeneratedLine);
         lotteryTicket.setTicket(pickedLine);
         return lotteryRepository.save(lotteryTicket);
     }
@@ -44,5 +44,13 @@ public class LotteryService {
 
     public List<LotteryTicket> findLotto649Tickets() {
         return lotteryRepository.findLotto649Tickets();
+    }
+
+    public List<Integer> getTicketLottoMaxQuickPick() {
+        return numbersGeneratorService.lottoMaxNumber();
+    }
+
+    public List<Integer> getTicketLotto649QuickPick() {
+        return numbersGeneratorService.lotto649Number();
     }
 }
