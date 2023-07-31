@@ -1,6 +1,7 @@
 package demo.project.Lottery.Service;
 
 import demo.project.Lottery.Model.LotteryType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -9,79 +10,45 @@ import java.util.List;
 import java.util.Random;
 
 @Service
-public class NumbersGeneratorService {
+public abstract class NumbersGeneratorService {
 
-    protected String[] lottoMaxNumberGenerator(List<Integer> userGeneratedLine) {
-        List<Integer> generatedLine = new ArrayList<>();
-        String[] ticket = new String[LotteryType.LOTTOMAX.getNUMBER_OF_LINES()];
-        ticket[0] = userGeneratedLine.toString();
-        for (int i = 1; i < LotteryType.LOTTOMAX.getNUMBER_OF_LINES(); i++) {
-            int randomNumber = getRandomNumberForMax();
+    private LotteryType lotteryType;
 
-            while (true) {
-
-                if (generatedLine.contains(randomNumber))
-                    randomNumber = getRandomNumberForMax();
-                else
-                    generatedLine.add(randomNumber);
-
-                if (generatedLine.size() == LotteryType.LOTTOMAX.getNUMBER_OF_NUMBERS())
-                    break;
-            }
-            Collections.sort(generatedLine);
-            ticket[i] = generatedLine.toString();
-            generatedLine.clear();
-        }
-        return ticket;
+    @Autowired
+    protected NumbersGeneratorService(LotteryType lotteryType) {
+        this.lotteryType = lotteryType;
     }
 
-    protected List<Integer> lottoMaxNumber() {
+    public LotteryType getLotteryType() {
+        return lotteryType;
+    }
+
+    public void setLotteryType(LotteryType lotteryType) {
+        this.lotteryType = lotteryType;
+    }
+
+    protected List<Integer> generateLine() {
         List<Integer> generatedLine = new ArrayList<>();
-        int randomNumber = getRandomNumberForMax();
+        int randomNumber = getRandomNumber();
         while (true) {
 
             if (generatedLine.contains(randomNumber))
-                randomNumber = getRandomNumberForMax();
+                randomNumber = getRandomNumber();
             else
                 generatedLine.add(randomNumber);
 
-            if (generatedLine.size() == LotteryType.LOTTOMAX.getNUMBER_OF_NUMBERS())
+            if (generatedLine.size() == lotteryType.getNUMBER_OF_NUMBERS())
                 break;
         }
         Collections.sort(generatedLine);
         return generatedLine;
     }
 
-    private int getRandomNumberForMax() {
+    protected int getRandomNumber() {
         Random random = new Random();
-        return (LotteryType.LOTTOMAX.getLOWER_LIMIT() + random.nextInt(LotteryType.LOTTOMAX.getUPPER_LIMIT()));
+        return (lotteryType.getLOWER_LIMIT() + random.nextInt(lotteryType.getUPPER_LIMIT()));
     }
 
-    protected String[] lotto649NumberGenerator(List<Integer> userGeneratedLine) {
-        String[] ticket = new String[LotteryType.LOTTO649.getNUMBER_OF_LINES()];
-        ticket[0] = userGeneratedLine.toString();
-        return ticket;
-    }
+    protected abstract String[] getTicket(List<Integer> userGeneratedLine);
 
-    private int getRandomNumberFor649() {
-        Random random = new Random();
-        return (LotteryType.LOTTO649.getLOWER_LIMIT() + random.nextInt(LotteryType.LOTTO649.getUPPER_LIMIT()));
-    }
-
-    protected List<Integer> lotto649Number() {
-        List<Integer> generatedLine = new ArrayList<>();
-        int randomNumber = getRandomNumberFor649();
-        while (true) {
-
-            if (generatedLine.contains(randomNumber))
-                randomNumber = getRandomNumberFor649();
-            else
-                generatedLine.add(randomNumber);
-
-            if (generatedLine.size() == LotteryType.LOTTO649.getNUMBER_OF_NUMBERS())
-                break;
-        }
-        Collections.sort(generatedLine);
-        return generatedLine;
-    }
 }

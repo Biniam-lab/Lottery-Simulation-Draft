@@ -5,6 +5,7 @@ import demo.project.Lottery.Model.LotteryTicket;
 import demo.project.Lottery.Model.LotteryType;
 import demo.project.Lottery.Repository.LotteryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,28 +13,31 @@ import java.util.List;
 @Service
 public class LotteryService {
 
-    @Autowired
-    private LotteryRepository lotteryRepository;
+    private final LotteryRepository lotteryRepository;
+    private final @Qualifier("Lotto649Service") NumbersGeneratorService numbersGeneratorService649;
+    private final @Qualifier("LottoMaxService") NumbersGeneratorService numbersGeneratorServiceMax;
 
     @Autowired
-    private NumbersGeneratorService numbersGeneratorService;
+    public LotteryService(LotteryRepository lotteryRepository, NumbersGeneratorService numbersGeneratorService649, NumbersGeneratorService numbersGeneratorServiceMax) {
+        this.lotteryRepository = lotteryRepository;
+        this.numbersGeneratorService649 = numbersGeneratorService649;
+        this.numbersGeneratorServiceMax = numbersGeneratorServiceMax;
+    }
 
     public LotteryTicket saveTicketLottomaxQuickPick(List<Integer> userGeneratedLine, LotteryTicket lotteryTicket) {
-
         String[] pickedLine;
         lotteryTicket.setLotteryPlayMethod(LotteryPlayMethod.QUICK_PICK);
         lotteryTicket.setLotteryType(LotteryType.LOTTOMAX);
-        pickedLine = numbersGeneratorService.lottoMaxNumberGenerator(userGeneratedLine);
+        pickedLine = numbersGeneratorServiceMax.getTicket(userGeneratedLine);
         lotteryTicket.setTicket(pickedLine);
         return lotteryRepository.save(lotteryTicket);
     }
 
     public LotteryTicket saveTicketLotto649QuickPick(List<Integer> userGeneratedLine, LotteryTicket lotteryTicket) {
-
         String[] pickedLine;
         lotteryTicket.setLotteryPlayMethod(LotteryPlayMethod.QUICK_PICK);
         lotteryTicket.setLotteryType(LotteryType.LOTTO649);
-        pickedLine = numbersGeneratorService.lotto649NumberGenerator(userGeneratedLine);
+        pickedLine = numbersGeneratorService649.getTicket(userGeneratedLine);
         lotteryTicket.setTicket(pickedLine);
         return lotteryRepository.save(lotteryTicket);
     }
@@ -47,10 +51,10 @@ public class LotteryService {
     }
 
     public List<Integer> getTicketLottoMaxQuickPick() {
-        return numbersGeneratorService.lottoMaxNumber();
+        return numbersGeneratorServiceMax.generateLine();
     }
 
     public List<Integer> getTicketLotto649QuickPick() {
-        return numbersGeneratorService.lotto649Number();
+        return numbersGeneratorService649.generateLine();
     }
 }

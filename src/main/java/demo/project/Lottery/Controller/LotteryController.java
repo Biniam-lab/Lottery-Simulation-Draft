@@ -13,8 +13,13 @@ import java.util.List;
 @RestController
 public class LotteryController {
 
+    private final LotteryService lotteryService;
+
     @Autowired
-    private LotteryService lotteryService;
+    public LotteryController(LotteryService lotteryService) {
+        this.lotteryService = lotteryService;
+    }
+
 
     @GetMapping("/ticket/lottomax")
     public List<LotteryTicket> findLottoMaxTickets() {
