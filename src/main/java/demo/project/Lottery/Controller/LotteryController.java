@@ -42,12 +42,22 @@ public class LotteryController {
     }
 
     @PostMapping("/purchase/lottomax/quickpick")
-    public LotteryTicket saveTicketLottomaxQuickPick(@RequestBody List<Integer> userGeneratedLine, LotteryTicket lotteryTicket) {
-        return lotteryService.saveTicketLottomaxQuickPick(userGeneratedLine, lotteryTicket);
+    public LotteryTicket saveTicketLottoMaxQuickPick(@RequestBody List<Integer> userGeneratedLine, LotteryTicket lotteryTicket) {
+        return lotteryService.saveTicketLottoMaxQuickPick(userGeneratedLine, lotteryTicket);
     }
 
     @PostMapping("/purchase/lotto649/quickpick")
     public LotteryTicket saveTicketLotto649QuickPick(@RequestBody List<Integer> userGeneratedLine, LotteryTicket lotteryTicket) {
         return lotteryService.saveTicketLotto649QuickPick(userGeneratedLine, lotteryTicket);
+    }
+
+    @PostMapping("/purchase/lottomax/selfpick")
+    public LotteryTicket saveTicketLottoMaxSelfPick(@RequestBody List<Integer> userGeneratedLine, LotteryTicket lotteryTicket) {
+        return lotteryService.saveTicketLottoMaxSelfPick(userGeneratedLine, lotteryTicket);
+    }
+
+    @PostMapping("/purchase/lotto649/selfpick")
+    public LotteryTicket saveTicketLotto649SelfPick(@RequestBody List<Integer> userGeneratedLine, LotteryTicket lotteryTicket) {
+        return lotteryService.saveTicketLotto649SelfPick(userGeneratedLine, lotteryTicket);
     }
 }

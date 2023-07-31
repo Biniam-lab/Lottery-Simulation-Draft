@@ -37,7 +37,7 @@ public abstract class NumbersGeneratorService {
             else
                 generatedLine.add(randomNumber);
 
-            if (generatedLine.size() == lotteryType.getNUMBER_OF_NUMBERS())
+            if (generatedLine.size() == getLotteryType().getNUMBER_OF_NUMBERS())
                 break;
         }
         Collections.sort(generatedLine);
@@ -46,7 +46,7 @@ public abstract class NumbersGeneratorService {
 
     protected int getRandomNumber() {
         Random random = new Random();
-        return (lotteryType.getLOWER_LIMIT() + random.nextInt(lotteryType.getUPPER_LIMIT()));
+        return (getLotteryType().getLOWER_LIMIT() + random.nextInt(getLotteryType().getUPPER_LIMIT()));
     }
 
     protected abstract String[] getTicket(List<Integer> userGeneratedLine);

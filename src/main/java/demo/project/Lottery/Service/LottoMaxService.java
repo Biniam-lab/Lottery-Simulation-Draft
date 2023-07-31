@@ -19,6 +19,9 @@ public class LottoMaxService extends NumbersGeneratorService {
     @Override
     protected String[] getTicket(List<Integer> userGeneratedLine) {
         String[] ticket = new String[LotteryType.LOTTOMAX.getNUMBER_OF_LINES()];
+        if(userGeneratedLine.size() != LotteryType.LOTTOMAX.getNUMBER_OF_NUMBERS()){
+            throw new IllegalArgumentException("Not valid line");
+        }
         ticket[0] = userGeneratedLine.toString();
         for (int i = 1; i < ticket.length; i++) {
             ticket[i] = generateLine().toString();

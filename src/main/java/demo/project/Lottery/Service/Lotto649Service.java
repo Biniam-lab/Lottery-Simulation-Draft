@@ -19,6 +19,9 @@ public class Lotto649Service extends NumbersGeneratorService {
     @Override
     protected String[] getTicket(List<Integer> userGeneratedLine) {
         String[] ticket = new String[LotteryType.LOTTO649.getNUMBER_OF_LINES()];
+        if(userGeneratedLine.size() != LotteryType.LOTTO649.getNUMBER_OF_NUMBERS()){
+            throw new IllegalArgumentException("Not valid line");
+        }
         ticket[0] = userGeneratedLine.toString();
         return ticket;
     }
